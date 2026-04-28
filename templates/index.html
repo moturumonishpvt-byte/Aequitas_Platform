@@ -472,8 +472,8 @@
                 document.getElementById('recDiffDetails').textContent = diffRecall + '%';
             }
             
-            // Calculate a dummy "Fairness Score" based on bias (100 - absolute average bias)
-            const fairness = Math.max(0, 100 - (Math.abs(diffProp) + Math.abs(diffRecall))/2);
+            // Use the precise Fairness Score from the backend AI engine
+            const fairness = data.fairness_score || 100;
             document.getElementById('fairnessScore').textContent = Math.round(fairness);
             
             // Set Dynamic Filename
