@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aequitas | AI Bias Auditing Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgMain: '#dce4df', // Light sage green-ish background from reference
+                        charcoal: '#1c1c1e',
+                        mint: '#9bfdbf',
+                        lilac: '#bda4ff',
+                        cardLight: '#f6f8f7',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #dce4df; color: #1c1c1e; }
+        .bento-card {
+            border-radius: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .bento-card:hover { transform: translateY(-3px); }
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        /* Custom scrollbar for the feed */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+        .bento-card { border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        
+        #cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #1c1c1e;
+            border: 2px solid #dce4df;
+            position: absolute;
+            left: -5.5px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: -20px;
+            width: 2px;
+            background-color: rgba(28, 28, 30, 0.1);
+        }
+        
+        /* Floating Chat */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header & Upload -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-charcoal tracking-tight">Aequitas <span class="text-lilac font-medium">Dashboard</span></h1>
+                <p class="text-sm text-gray-500 mt-1">Enterprise AI Bias Auditing Platform</p>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Dropzone trigger -->
+                <div id="uploadTrigger" class="glass-btn px-6 py-3 rounded-full cursor-pointer hover:bg-white/60 transition-colors flex items-center gap-2 font-medium shadow-sm">
+                    <svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    <span>Upload HR Dataset (CSV)</span>
+                    <input type="file" id="fileInput" class="hidden" accept=".csv" />
+                </div>
+            </div>
+        </header>
+
+        <!-- Initial state container (Before Audit) -->
+        <div id="emptyState" class="max-w-4xl mx-auto py-12">
+            <h2 class="text-4xl font-bold text-center text-charcoal mb-4 min-h-[40px]">
+                <span id="typewriter"></span><span id="cursor" class="text-lilac font-light -ml-1">|</span>
+            </h2>
+            <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed text-center mb-10">Aequitas uses Google's Vertex AI Fairness Indicators to audit your automated hiring systems. We analyze your historical data to mathematically prove if your AI is unfairly penalizing marginalized candidates.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-transparent hover:border-mint/50 transition-colors">
+                    <div class="w-12 h-12 bg-mint/20 rounded-full flex items-center justify-center mx-auto mb-4 text-charcoal font-bold text-xl">1</div>
+                    <h3 class="font-bold text-charcoal mb-2">Upload Data</h3>
+                    <p class="text-sm text-gray-500">Provide a CSV containing candidate demographics and your AI's historical interview scores.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-transparent hover:border-lilac/50 transition-colors">
+                    <div class="w-12 h-12 bg-lilac/20 rounded-full flex items-center justify-center mx-auto mb-4 text-charcoal font-bold text-xl">2</div>
+                    <h3 class="font-bold text-charcoal mb-2">Multimodal Analysis</h3>
+                    <p class="text-sm text-gray-500">Our engine uses Vertex AI Fairness Indicators and Gemma 4 Multimodal NLP to detect bias.</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm text-center border border-transparent hover:border-charcoal/20 transition-colors">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-charcoal font-bold text-xl">3</div>
+                    <h3 class="font-bold text-charcoal mb-2">Agent Builder Mitigation</h3>
+                    <p class="text-sm text-gray-500">Deploy Google Cloud Agent Builder to re-weight your pipeline, backed by a SynthID report.</p>
+                </div>
+            </div>
+
+            <div id="mainDropZone" class="bg-white border-2 border-dashed border-lilac/50 rounded-[2.5rem] p-12 text-center cursor-pointer hover:bg-lilac/5 transition-all shadow-sm group">
+                <div class="w-20 h-20 bg-lilac/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-10 h-10 text-lilac" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-charcoal mb-2">Drop your HR dataset here</h3>
+                <p class="text-gray-500 mb-6">Must be a .csv file containing columns like Accent, Gender, and AI_Interview_Score</p>
+                <span class="bg-charcoal text-white px-6 py-3 rounded-full font-medium shadow-md group-hover:bg-black transition-colors">Browse Files</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid (Hidden initially) -->
+        <main id="dashboardGrid" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
+            
+            <!-- Top-Left: Overall System Fairness (Gauge-like) -->
+            <div class="md:col-span-4 bento-card bg-mint p-8 relative overflow-hidden flex flex-col justify-between h-[320px]">
+                <div class="flex justify-between items-start z-10">
+                    <h3 class="font-medium text-charcoal/80 text-lg">Overall System Fairness</h3>
+                    <div class="w-10 h-10 bg-white/50 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm">
+                        <svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                </div>
+                
+                <div class="z-10 mt-4">
+                    <div class="flex items-end gap-2">
+                        <span id="fairnessScore" class="text-7xl font-bold tracking-tighter text-charcoal">--</span>
+                        <span class="text-xl font-medium text-charcoal/50 mb-3">/ 100</span>
+                    </div>
+                    <div id="fairnessBadge" class="mt-4 flex items-center gap-2 bg-charcoal text-white px-4 py-2 rounded-full inline-flex transition-colors">
+                        <span id="fairnessDot" class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                        <span id="fairnessText" class="text-sm font-medium">Critical Bias Detected</span>
+                    </div>
+                </div>
+                
+                <!-- Decorative arch imitating the current balance widget -->
+                <div class="absolute -bottom-16 -right-16 w-80 h-80 border-[40px] border-charcoal/10 rounded-full"></div>
+            </div>
+
+            <!-- Center: Trend Analysis (Bar Chart) -->
+            <div class="md:col-span-4 bento-card bg-charcoal p-8 flex flex-col justify-between h-[320px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-white font-medium text-lg">Performance vs. Recall</h3>
+                    <select class="bg-white/10 text-white text-xs px-4 py-2 rounded-full outline-none border border-white/20 hover:bg-white/20 transition-colors cursor-pointer appearance-none">
+                        <option>Accents Demographics</option>
+                    </select>
+                </div>
+                <div class="flex-grow w-full relative">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Top-Right: Recent Audits & SynthID -->
+            <div class="md:col-span-4 bento-card bg-white p-8 h-[320px] flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-medium text-charcoal text-lg flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-charcoal text-white flex items-center justify-center shadow-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </span>
+                        Recent Audits
+                    </h3>
+                </div>
+                
+                <div class="flex-grow overflow-y-auto custom-scroll space-y-4 pr-2">
+                    <!-- Dynamic SynthID Report block -->
+                    <div class="p-4 bg-charcoal/[0.03] rounded-2xl border border-charcoal/10 relative hover:bg-charcoal/[0.05] transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-1">
+                            <p id="auditFilename" class="text-sm font-semibold text-charcoal truncate pr-2">--</p>
+                            <div class="bg-lilac text-charcoal text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center shadow-sm shrink-0">
+                                <svg class="w-3 h-3 mr-1 text-charcoal" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                SynthID Verified
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">Processed just now</p>
+                        <p id="synthIdHash" class="text-[10px] font-mono mt-3 text-charcoal/50 break-all bg-white p-2 rounded-lg border border-gray-200"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom-Left: Drill-Down Metrics -->
+            <div class="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- KPI 1 -->
+                <div class="bento-card bg-lilac p-8 flex flex-col justify-between relative overflow-hidden group cursor-pointer h-[280px]">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-charcoal font-semibold text-lg">Data Bias</h3>
+                            <div class="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center transition-transform group-hover:scale-110">
+                                <svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-charcoal/70 text-sm mt-1 font-medium">Difference in Positive Proportions</p>
+                    </div>
+                    <div class="mt-8">
+                        <span id="diffPropVal" class="text-6xl font-bold text-charcoal tracking-tight">--</span>
+                        <div class="flex items-center gap-2 mt-4">
+                            <span id="dataBiasDot" class="w-2 h-2 rounded-full bg-red-500"></span>
+                            <p id="dataBiasText" class="text-sm font-medium text-charcoal/80">Severe selection rate disparity</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Hover expansion hint (Progressive Disclosure) -->
+                    <div class="absolute inset-0 bg-charcoal text-white p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[2rem]">
+                        <p class="text-lg font-semibold mb-4 text-mint">Vertex AI Breakdown</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-300">Native Selection Rate:</span>
+                                <span id="srNative" class="text-white font-bold">--</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-300">Non-Native Selection Rate:</span>
+                                <span id="srNonNative" class="text-white font-bold">--</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-lilac mt-6 text-center">Click for full statistical report</p>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bento-card bg-white p-8 flex flex-col justify-between relative group cursor-pointer h-[280px]">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-charcoal font-semibold text-lg">Model Bias</h3>
+                            <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center transition-transform group-hover:scale-110">
+                                <svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </div>
+                        </div>
+                        <p class="text-gray-500 text-sm mt-1 font-medium">Recall Difference (Accuracy gap)</p>
+                    </div>
+                    <div class="mt-8">
+                        <span id="diffRecallVal" class="text-6xl font-bold text-charcoal tracking-tight">--</span>
+                        <div class="flex items-center gap-2 mt-4">
+                            <span id="modelBiasDot" class="w-2 h-2 rounded-full bg-orange-500"></span>
+                            <p id="modelBiasText" class="text-sm font-medium text-gray-600">Performance variance across groups</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Hover expansion hint -->
+                    <div class="absolute inset-0 bg-charcoal text-white p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-[2rem]">
+                        <p class="text-lg font-semibold mb-3 text-lilac">Gemma Multimodal NLP</p>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-300 text-xs">Non-Native Transcript Toxicity:</span>
+                                <span id="toxNonNative" class="text-white font-bold text-sm text-red-400">--</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-2">
+                                <span class="text-gray-300 text-xs">Native Transcript Toxicity:</span>
+                                <span id="toxNative" class="text-white font-bold text-sm text-mint">--</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-gray-300 text-xs">Model Recall Gap:</span>
+                                <span id="recDiffDetails" class="text-white font-bold text-sm">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom-Right: Predictive Insights Timeline -->
+            <div id="mitigateTimeline" class="md:col-span-4 bento-card bg-white p-8 h-[280px] overflow-hidden flex flex-col justify-between transition-opacity">
+                <div>
+                    <h3 class="font-semibold text-charcoal text-lg mb-6 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-full bg-mint text-charcoal flex items-center justify-center shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </span>
+                        AI Mitigation Path
+                    </h3>
+                    
+                    <div class="relative pl-8 space-y-4 mt-2">
+                        <div class="timeline-line left-[3px] h-[60px]"></div>
+                        
+                        <div class="relative">
+                            <div class="timeline-dot bg-red-500 border-white -left-[32px] w-4 h-4"></div>
+                            <p class="text-sm font-bold text-charcoal">Issue Identified</p>
+                            <p class="text-[11px] text-gray-500 mt-1 leading-relaxed pr-2">Transcription penalizes non-native phonemes.</p>
+                        </div>
+                        
+                        <div class="relative">
+                            <div class="timeline-dot border-white bg-charcoal -left-[32px] w-4 h-4"></div>
+                            <p class="text-sm font-bold text-charcoal">Recommendation 1</p>
+                            <p class="text-[11px] text-gray-500 mt-1 leading-relaxed pr-2">Deploy Agent Builder to dynamically re-weight pipeline.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="mitigateBtn" class="w-full bg-charcoal text-white rounded-xl py-3 text-sm font-bold shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 mt-4 cursor-pointer relative overflow-hidden group">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-mint/20 via-lilac/20 to-mint/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <svg class="w-4 h-4 text-mint z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    <span class="z-10" id="mitigateBtnText">Run Agent Builder</span>
+                </button>
+                <a id="downloadBtn" href="/api/download" class="hidden w-full bg-lilac/20 text-charcoal rounded-xl py-3 text-sm font-bold shadow-sm hover:bg-lilac/30 transition-transform flex items-center justify-center gap-2 mt-2">
+                    <svg class="w-4 h-4 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download Mitigated Data
+                </a>
+            </div>
+
+            </div>
+            
+            <!-- Bottom Full Width: Executive Summary -->
+            <div class="md:col-span-12 bento-card bg-charcoal text-white p-8 mb-8">
+                <h3 class="font-semibold text-lilac text-lg mb-3 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Executive Audit Summary
+                </h3>
+                <p id="executiveSummary" class="text-gray-300 leading-relaxed text-sm whitespace-pre-wrap">
+                    Awaiting analysis...
+                </p>
+            </div>
+
+        </main>
+    </div>
+
+
+
+    <script>
+        const uploadTrigger = document.getElementById('uploadTrigger');
+        const fileInput = document.getElementById('fileInput');
+        const emptyState = document.getElementById('emptyState');
+        const dashboardGrid = document.getElementById('dashboardGrid');
+        const mainDropZone = document.getElementById('mainDropZone');
+        const mitigateBtn = document.getElementById('mitigateBtn');
+        const mitigateBtnText = document.getElementById('mitigateBtnText');
+        
+        let chartInstance = null;
+
+        // --- Typewriter Effect ---
+        const words = [
+            "Detect Algorithmic Bias in Seconds.",
+            "Identify Hiring Discrimination Instantly.",
+            "Audit Vertex AI Pipelines Automatically.",
+            "Ensure Enterprise Fairness Standards."
+        ];
+        let wordIndex = 0;
+        let isDeleting = false;
+        let text = '';
+        
+        function type() {
+            const currentWord = words[wordIndex % words.length];
+            
+            if (isDeleting) {
+                text = currentWord.substring(0, text.length - 1);
+            } else {
+                text = currentWord.substring(0, text.length + 1);
+            }
+            
+            document.getElementById("typewriter").textContent = text;
+            
+            let typeSpeed = 80; // Typing speed
+            
+            if (isDeleting) {
+                typeSpeed /= 2; // Backspace faster
+            }
+            
+            if (!isDeleting && text === currentWord) {
+                typeSpeed = 2500; // Pause when word is fully typed
+                isDeleting = true;
+            } else if (isDeleting && text === '') {
+                isDeleting = false;
+                wordIndex++;
+                typeSpeed = 500; // Pause before typing next word
+            }
+            
+            setTimeout(type, typeSpeed);
+        }
+        
+        type(); // Start typewriter loop
+
+        uploadTrigger.addEventListener('click', () => fileInput.click());
+        mainDropZone.addEventListener('click', () => fileInput.click());
+        
+        if (mitigateBtn) {
+            mitigateBtn.addEventListener('click', async () => {
+                mitigateBtnText.innerHTML = "Agent Re-weighting...";
+                mitigateBtn.classList.add("animate-pulse");
+                
+                try {
+                    const response = await fetch('/api/mitigate', { method: 'POST' });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        setTimeout(() => {
+                            displayDashboard(data);
+                            mitigateBtnText.innerHTML = "Mitigation Successful";
+                            mitigateBtn.classList.remove("animate-pulse", "bg-charcoal", "text-white");
+                            mitigateBtn.classList.add("bg-mint", "text-charcoal");
+                            setTimeout(() => {
+                                document.getElementById('downloadBtn').classList.remove('hidden');
+                            }, 500);
+                        }, 1500); // Dramatic effect for demo video
+                    }
+                } catch (err) {
+                    alert('Mitigation failed.');
+                }
+            });
+        }
+        
+        fileInput.addEventListener('change', async (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                uploadTrigger.innerHTML = `<svg class="w-5 h-5 animate-spin text-charcoal" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="font-medium">Analyzing...</span>`;
+                
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/api/analyze', { method: 'POST', body: formData });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        displayDashboard(data);
+                        uploadTrigger.innerHTML = `<svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span class="font-medium">Audit Complete</span>`;
+                    } else {
+                        alert('Error: ' + data.error);
+                        resetUpload();
+                    }
+                } catch (err) {
+                    alert('Analysis failed. Make sure the backend is running.');
+                    resetUpload();
+                }
+            }
+        });
+
+        function resetUpload() {
+            uploadTrigger.innerHTML = `<svg class="w-5 h-5 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg> <span>Upload HR Dataset</span>`;
+        }
+
+        function displayDashboard(data) {
+            emptyState.classList.add('hidden');
+            dashboardGrid.classList.remove('hidden');
+            
+            // Extract Metrics
+            const diffProp = data.metrics.selection_rate.Difference;
+            const diffRecall = data.metrics.recall.Difference;
+            
+            // Populate KPIs
+            document.getElementById('diffPropVal').textContent = diffProp + '%';
+            document.getElementById('diffRecallVal').textContent = diffRecall + '%';
+            
+            // Populate Hover Stats
+            document.getElementById('srNative').textContent = data.metrics.selection_rate.Native + '%';
+            document.getElementById('srNonNative').textContent = data.metrics.selection_rate['Non-Native'] + '%';
+            
+            if (data.metrics.perspective_toxicity) {
+                document.getElementById('toxNative').textContent = data.metrics.perspective_toxicity.Native + '%';
+                document.getElementById('toxNonNative').textContent = data.metrics.perspective_toxicity['Non-Native'] + '%';
+                document.getElementById('recDiffDetails').textContent = diffRecall + '%';
+            }
+            
+            // Calculate a dummy "Fairness Score" based on bias (100 - absolute average bias)
+            const fairness = Math.max(0, 100 - (Math.abs(diffProp) + Math.abs(diffRecall))/2);
+            document.getElementById('fairnessScore').textContent = Math.round(fairness);
+            
+            // Set Dynamic Filename
+            if (data.filename) {
+                document.getElementById('auditFilename').textContent = data.filename;
+            }
+            
+            // Toggle UI based on fairness status
+            if (data.is_fair) {
+                document.getElementById('fairnessDot').className = "w-2 h-2 rounded-full bg-mint";
+                document.getElementById('fairnessText').textContent = "System Audited & Fair";
+                
+                document.getElementById('dataBiasDot').className = "w-2 h-2 rounded-full bg-mint";
+                document.getElementById('dataBiasText').textContent = "Equitable Selection Rates";
+                
+                document.getElementById('modelBiasDot').className = "w-2 h-2 rounded-full bg-mint";
+                document.getElementById('modelBiasText').textContent = "Recall parity achieved";
+                
+                document.getElementById('mitigateBtnText').textContent = "System Optimized";
+                document.getElementById('downloadBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('fairnessDot').className = "w-2 h-2 rounded-full bg-red-400 animate-pulse";
+                document.getElementById('fairnessText').textContent = "Critical Bias Detected";
+                
+                document.getElementById('dataBiasDot').className = "w-2 h-2 rounded-full bg-red-500";
+                document.getElementById('dataBiasText').textContent = "Severe selection rate disparity";
+                
+                document.getElementById('modelBiasDot').className = "w-2 h-2 rounded-full bg-orange-500";
+                document.getElementById('modelBiasText').textContent = "Performance variance across groups";
+                
+                document.getElementById('mitigateBtnText').textContent = "Run Agent Builder";
+                document.getElementById('downloadBtn').classList.add('hidden');
+            }
+            
+            // Extract SynthID from report text
+            const match = data.report.match(/\[SYNTHID_CRYPTOGRAPHIC_WATERMARK:\s*(.*?)\]/);
+            if(match) {
+                document.getElementById('synthIdHash').textContent = match[1];
+                // Remove the watermark text to show purely the executive summary
+                const cleanSummary = data.report.replace(/\[SYNTHID_CRYPTOGRAPHIC_WATERMARK:.*?\]/g, '').trim();
+                document.getElementById('executiveSummary').textContent = cleanSummary;
+            }
+
+            // Render Center Chart
+            renderChart(data.metrics);
+        }
+
+        function renderChart(metrics) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            
+            if (chartInstance) chartInstance.destroy();
+
+            Chart.defaults.color = 'rgba(255,255,255,0.5)';
+            Chart.defaults.font.family = 'Outfit';
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Native Accent', 'Non-Native Accent'],
+                    datasets: [
+                        {
+                            label: 'Selection Rate',
+                            data: [metrics.selection_rate.Native, metrics.selection_rate['Non-Native']],
+                            backgroundColor: '#9bfdbf',
+                            borderRadius: 6,
+                            borderSkipped: false,
+                            barPercentage: 0.7,
+                            categoryPercentage: 0.5
+                        },
+                        {
+                            label: 'Recall Rate',
+                            data: [metrics.recall.Native, metrics.recall['Non-Native']],
+                            backgroundColor: '#bda4ff',
+                            borderRadius: 6,
+                            borderSkipped: false,
+                            barPercentage: 0.7,
+                            categoryPercentage: 0.5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)', drawBorder: false },
+                            border: { display: false }
+                        },
+                        x: {
+                            grid: { display: false, drawBorder: false },
+                            border: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
