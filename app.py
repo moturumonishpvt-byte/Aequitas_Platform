@@ -22,12 +22,12 @@ def apply_synthid_watermark(text):
 
 def calc_fairness_score(diff_selection, diff_recall):
     """Calculate a fairness score from 0-100 based on statistical disparity."""
-    selection_penalty = abs(diff_selection) * 100
-    recall_penalty = abs(diff_recall) * 100
+    selection_penalty = abs(float(diff_selection)) * 100
+    recall_penalty = abs(float(diff_recall)) * 100
     # Use the larger of the two penalties to avoid masking severe bias
     primary_penalty = max(selection_penalty, recall_penalty)
     secondary_penalty = min(selection_penalty, recall_penalty) * 0.5
-    return max(0, round(100 - primary_penalty - secondary_penalty))
+    return int(max(0, round(100 - primary_penalty - secondary_penalty)))
 
 @app.route('/')
 def index():
@@ -72,14 +72,10 @@ def analyze():
                     record['perspective_toxicity_score'] = float(row.get('Perspective_Toxicity_Score'))
 
                 # Key Logic: Only reset mitigation if the record is NOT already marked as mitigated
-                # This handles the case where the user re-uploads the same already-fixed CSV
                 if existing_record and existing_record.get('is_mitigated'):
-                    # Keep the existing UUID so it's an update, not insert
                     record['id'] = existing_record['id']
-                    # PRESERVE the mitigated scores — don't overwrite them
                     record['is_mitigated'] = True
                 else:
-                    # New data or previously un-mitigated data — reset mitigation columns
                     record['corrected_ai_score'] = None
                     record['corrected_hire_decision'] = None
                     record['is_mitigated'] = False
@@ -121,7 +117,6 @@ def analyze():
             return jsonify({'error': 'Missing required columns (Accent, True_Hire_Decision)'}), 400
 
         # --- STEP 3: Choose the correct hire column ---
-        # If records are already mitigated in Supabase, use corrected decisions
         already_mitigated = 'is_mitigated' in df.columns and df['is_mitigated'].any()
         if already_mitigated and 'Corrected_Hire_Decision' in df.columns and df['Corrected_Hire_Decision'].notna().any():
             hire_col = 'Corrected_Hire_Decision'
@@ -132,23 +127,23 @@ def analyze():
         native_group = df[df['Accent'] == 'Native']
         non_native_group = df[df['Accent'] == 'Non-Native']
 
-        sr_native = native_group[hire_col].mean()
-        sr_non_native = non_native_group[hire_col].mean()
-        diff_positive_proportions = sr_non_native - sr_native
+        sr_native = float(native_group[hire_col].mean())
+        sr_non_native = float(non_native_group[hire_col].mean())
+        diff_positive_proportions = float(sr_non_native - sr_native)
 
         def calc_recall(group):
             actual_positives = group[group['True_Hire_Decision'] == 1]
             if len(actual_positives) == 0:
-                return 0
+                return 0.0
             true_positives = actual_positives[actual_positives[hire_col] == 1]
-            return len(true_positives) / len(actual_positives)
+            return float(len(true_positives) / len(actual_positives))
 
         recall_native = calc_recall(native_group)
         recall_non_native = calc_recall(non_native_group)
-        recall_diff = recall_non_native - recall_native
+        recall_diff = float(recall_non_native - recall_native)
 
-        toxicity_native = native_group['Perspective_Toxicity_Score'].mean() if 'Perspective_Toxicity_Score' in df.columns else 0.15
-        toxicity_non_native = non_native_group['Perspective_Toxicity_Score'].mean() if 'Perspective_Toxicity_Score' in df.columns else 0.45
+        toxicity_native = float(native_group['Perspective_Toxicity_Score'].mean()) if 'Perspective_Toxicity_Score' in df.columns else 0.15
+        toxicity_non_native = float(non_native_group['Perspective_Toxicity_Score'].mean()) if 'Perspective_Toxicity_Score' in df.columns else 0.45
 
         metrics = {
             'selection_rate': {
@@ -168,7 +163,7 @@ def analyze():
         }
 
         fairness_score = calc_fairness_score(diff_positive_proportions, recall_diff)
-        is_fair = abs(diff_positive_proportions) < 0.07 and abs(recall_diff) < 0.07
+        is_fair = bool(abs(diff_positive_proportions) < 0.07 and abs(recall_diff) < 0.07)
 
         if is_fair:
             report_text = (
@@ -208,14 +203,12 @@ def analyze():
 @app.route('/api/mitigate', methods=['POST'])
 def mitigate():
     try:
-        # 1. Read RAW (un-mitigated) data from Supabase
         response = supabase.table('candidates').select('*').execute()
         df = pd.DataFrame(response.data)
 
         if df.empty:
             return jsonify({'error': 'Supabase database is empty!'}), 400
 
-        # Standardize column names
         df.columns = [col.lower() for col in df.columns]
         df = df.rename(columns={
             'accent': 'Accent',
@@ -226,32 +219,27 @@ def mitigate():
             'id': 'supabase_id'
         })
 
-        # 2. SURGICAL MITIGATION
-        # Match Non-Native selection rate to Native selection rate
         native_group = df[df['Accent'] == 'Native']
         non_native_group = df[df['Accent'] == 'Non-Native']
 
-        target_sr = native_group['AI_Hire_Decision'].mean()
+        target_sr = float(native_group['AI_Hire_Decision'].mean())
         total_non_native = len(non_native_group)
-        required_non_native_hires = round(target_sr * total_non_native)
+        required_non_native_hires = int(round(target_sr * total_non_native))
         current_hires = int(non_native_group['AI_Hire_Decision'].sum())
         additional_needed = max(0, required_non_native_hires - current_hires)
 
         df['Corrected_AI_Score'] = df['AI_Interview_Score'].copy()
         df['Corrected_Hire_Decision'] = df['AI_Hire_Decision'].copy()
 
-        # Flip the top-scoring rejected Non-Native candidates to "Hired"
         rejected_non_native = df[
             (df['Accent'] == 'Non-Native') & (df['AI_Hire_Decision'] == 0)
         ].sort_values('AI_Interview_Score', ascending=False)
 
         to_flip = rejected_non_native.head(additional_needed).index
         df.loc[to_flip, 'Corrected_Hire_Decision'] = 1
-        # Boost their visible score to reflect the recalibration
-        mean_native_score = native_group['AI_Interview_Score'].mean()
+        mean_native_score = float(native_group['AI_Interview_Score'].mean())
         df.loc[to_flip, 'Corrected_AI_Score'] = (mean_native_score * 0.9 + df.loc[to_flip, 'AI_Interview_Score'] * 0.1).clip(upper=100)
 
-        # 3. WRITE BACK TO SUPABASE — mark all records as mitigated
         records_to_update = []
         for _, row in df.iterrows():
             records_to_update.append({
@@ -264,30 +252,28 @@ def mitigate():
         for i in range(0, len(records_to_update), 500):
             supabase.table('candidates').upsert(records_to_update[i:i+500]).execute()
 
-        # 4. Export downloadable mitigated CSV
         df.to_csv(os.path.join('uploads', 'mitigated_dataset.csv'), index=False)
 
-        # 5. Recalculate metrics on the corrected data
         native_group = df[df['Accent'] == 'Native']
         non_native_group = df[df['Accent'] == 'Non-Native']
 
-        sr_native = native_group['Corrected_Hire_Decision'].mean()
-        sr_non_native = non_native_group['Corrected_Hire_Decision'].mean()
-        diff_positive_proportions = sr_non_native - sr_native
+        sr_native = float(native_group['Corrected_Hire_Decision'].mean())
+        sr_non_native = float(non_native_group['Corrected_Hire_Decision'].mean())
+        diff_positive_proportions = float(sr_non_native - sr_native)
 
         def calc_recall_corrected(group):
             actual_positives = group[group['True_Hire_Decision'] == 1]
             if len(actual_positives) == 0:
-                return 0
+                return 0.0
             true_positives = actual_positives[actual_positives['Corrected_Hire_Decision'] == 1]
-            return len(true_positives) / len(actual_positives)
+            return float(len(true_positives) / len(actual_positives))
 
         recall_native = calc_recall_corrected(native_group)
         recall_non_native = calc_recall_corrected(non_native_group)
-        recall_diff = recall_non_native - recall_native
+        recall_diff = float(recall_non_native - recall_native)
 
-        toxicity_native = native_group['Perspective_Toxicity_Score'].mean() if 'Perspective_Toxicity_Score' in df.columns else 0.15
-        toxicity_non_native = toxicity_native * 1.02  # Near-equal after Agent Builder sanitization
+        toxicity_native = float(native_group['Perspective_Toxicity_Score'].mean()) if 'Perspective_Toxicity_Score' in df.columns else 0.15
+        toxicity_non_native = float(toxicity_native * 1.02)
 
         metrics = {
             'selection_rate': {
