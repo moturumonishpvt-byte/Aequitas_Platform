@@ -51,10 +51,10 @@ def analyze():
 
         try:
             df_uploaded = pd.read_csv(filepath)
-            # DEDUPLICATE CSV BY CANDIDATE_ID TO PREVENT DB ERRORS (21000)
+            # DEDUPLICATE CSV BY CANDIDATE_ID TO PREVENT DB ERRORS
             df_uploaded = df_uploaded.drop_duplicates(subset=['Candidate_ID'], keep='last')
 
-            # Fetch existing records to know which ones are ALREADY mitigated
+            # Fetch existing records to map candidate_id -> current database UUID
             existing = supabase.table('candidates').select('id, candidate_id, is_mitigated').execute()
             existing_map = {str(item['candidate_id']): item for item in existing.data} if existing.data else {}
 
@@ -77,15 +77,18 @@ def analyze():
                     record['perspective_toxicity_score'] = float(row.get('Perspective_Toxicity_Score'))
 
                 if existing_record:
+                    # Update existing record
                     record['id'] = existing_record['id']
                     if existing_record.get('is_mitigated'):
                         record['is_mitigated'] = True
                 else:
+                    # New record: Generate a UUID manually to satisfy NOT NULL constraint
+                    record['id'] = str(uuid.uuid4())
                     record['is_mitigated'] = False
 
                 records.append(record)
 
-            # Push to Supabase using candidate_id as the unique key for updates (resolves 23505)
+            # Push to Supabase
             for i in range(0, len(records), 500):
                 supabase.table('candidates').upsert(records[i:i+500], on_conflict='candidate_id').execute()
 
@@ -247,7 +250,6 @@ def mitigate():
                 'is_mitigated': True
             })
 
-        # Upsert using candidate_id as unique key to update scores
         for i in range(0, len(records_to_update), 500):
             supabase.table('candidates').upsert(records_to_update[i:i+500], on_conflict='candidate_id').execute()
 
