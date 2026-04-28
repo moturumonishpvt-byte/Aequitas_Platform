@@ -299,4 +299,6 @@ def download_mitigated():
         return str(e), 404
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Bind to 0.0.0.0 and use the PORT env variable for Render/Vercel compatibility
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
