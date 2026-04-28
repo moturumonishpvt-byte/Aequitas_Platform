@@ -69,6 +69,10 @@ def analyze():
                         record['corrected_ai_score'] = float(row.get('Corrected_AI_Score', 0.0))
                         record['corrected_hire_decision'] = int(row.get('Corrected_Hire_Decision', 0))
                         
+                    # Reset mitigation 'memory' for every fresh upload to show the raw bias first
+                    record['corrected_ai_score'] = None
+                    record['corrected_hire_decision'] = None
+                    
                     records.append(record)
                     
                 # Push to Supabase in chunks
