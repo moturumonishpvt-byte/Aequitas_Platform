@@ -26,68 +26,66 @@ def index():
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    
-    filepath = os.path.join('uploads', file.filename)
-    file.save(filepath)
-    
-    # Save a copy for the mitigation engine to process later
-    import shutil
-    shutil.copy(filepath, os.path.join('uploads', 'latest.csv'))
-    
-    try:
-        # READ UPLOADED CSV
-        df_uploaded = pd.read_csv(filepath)
+    # If a file is provided, sync it to Supabase first
+    if 'file' in request.files and request.files['file'].filename != '':
+        file = request.files['file']
+        filepath = os.path.join('uploads', file.filename)
+        file.save(filepath)
         
-        # AUTO-IMPORT TO SUPABASE
+        # Save a copy for the mitigation engine to process later
+        import shutil
+        shutil.copy(filepath, os.path.join('uploads', 'latest.csv'))
+        
         try:
-            # Fetch existing records to map IDs for a clean upsert (overwrites old data)
-            existing = supabase.table('candidates').select('id, candidate_id').execute()
-            id_map = {item['candidate_id']: item['id'] for item in existing.data} if existing.data else {}
+            # READ UPLOADED CSV
+            df_uploaded = pd.read_csv(filepath)
             
-            records = []
-            for _, row in df_uploaded.iterrows():
-                cid = str(row.get('Candidate_ID', ''))
-                record = {
-                    'candidate_id': cid,
-                    'gender': str(row.get('Gender', '')),
-                    'accent': str(row.get('Accent', '')),
-                    'true_hire_decision': int(row.get('True_Hire_Decision', 0)),
-                    'ai_interview_score': float(row.get('AI_Interview_Score', 0.0)),
-                    'ai_hire_decision': int(row.get('AI_Hire_Decision', 0)),
-                    'transcript_notes': str(row.get('Transcript_Notes', ''))
-                }
+            # AUTO-IMPORT TO SUPABASE
+            try:
+                # Fetch existing records to map IDs for a clean upsert (overwrites old data)
+                existing = supabase.table('candidates').select('id, candidate_id').execute()
+                id_map = {item['candidate_id']: item['id'] for item in existing.data} if existing.data else {}
                 
-                if cid in id_map:
-                    record['id'] = id_map[cid] # Include Primary Key to force an UPDATE instead of INSERT
+                records = []
+                for _, row in df_uploaded.iterrows():
+                    cid = str(row.get('Candidate_ID', ''))
+                    record = {
+                        'candidate_id': cid,
+                        'gender': str(row.get('Gender', '')),
+                        'accent': str(row.get('Accent', '')),
+                        'true_hire_decision': int(row.get('True_Hire_Decision', 0)),
+                        'ai_interview_score': float(row.get('AI_Interview_Score', 0.0)),
+                        'ai_hire_decision': int(row.get('AI_Hire_Decision', 0)),
+                        'transcript_notes': str(row.get('Transcript_Notes', ''))
+                    }
                     
-                if pd.notna(row.get('Perspective_Toxicity_Score')):
-                    record['perspective_toxicity_score'] = float(row.get('Perspective_Toxicity_Score'))
-                
-                if 'Corrected_Hire_Decision' in df_uploaded.columns:
-                    record['corrected_ai_score'] = float(row.get('Corrected_AI_Score', 0.0))
-                    record['corrected_hire_decision'] = int(row.get('Corrected_Hire_Decision', 0))
+                    if cid in id_map:
+                        record['id'] = id_map[cid] # Include Primary Key to force an UPDATE instead of INSERT
+                        
+                    if pd.notna(row.get('Perspective_Toxicity_Score')):
+                        record['perspective_toxicity_score'] = float(row.get('Perspective_Toxicity_Score'))
                     
-                records.append(record)
-                
-            # Push to Supabase in chunks
-            for i in range(0, len(records), 500):
-                supabase.table('candidates').upsert(records[i:i+500]).execute()
-                
+                    if 'Corrected_Hire_Decision' in df_uploaded.columns:
+                        record['corrected_ai_score'] = float(row.get('Corrected_AI_Score', 0.0))
+                        record['corrected_hire_decision'] = int(row.get('Corrected_Hire_Decision', 0))
+                        
+                    records.append(record)
+                    
+                # Push to Supabase in chunks
+                for i in range(0, len(records), 500):
+                    supabase.table('candidates').upsert(records[i:i+500]).execute()
+            except Exception as e:
+                print(f"Supabase Auto-Import Failed: {e}")
         except Exception as e:
-            print(f"Supabase Auto-Import Failed: {e}")
+            return jsonify({'error': str(e)}), 500
             
+    try:
         # READ FROM SUPABASE DIRECTLY
         response = supabase.table('candidates').select('*').execute()
         df = pd.DataFrame(response.data)
         
         if df.empty:
-            df = df_uploaded # Fallback to local if Supabase fails
-            df = df.rename(columns=lambda x: x.lower()) # Standardize columns for fallback
+            return jsonify({'error': 'No data found in Supabase. Please upload a CSV first.'}), 400
             
         # Map Supabase lowercase columns to Title Case for our analysis logic
         df = df.rename(columns={
