@@ -473,7 +473,7 @@
             }
             
             // Use the precise Fairness Score from the backend AI engine
-            const fairness = data.fairness_score || 100;
+            const fairness = (data.fairness_score !== undefined) ? data.fairness_score : 100;
             document.getElementById('fairnessScore').textContent = Math.round(fairness);
             
             // Set Dynamic Filename
