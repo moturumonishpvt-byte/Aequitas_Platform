@@ -51,8 +51,10 @@ def analyze():
 
         try:
             df_uploaded = pd.read_csv(filepath)
+            # DEDUPLICATE CSV BY CANDIDATE_ID TO PREVENT DB ERRORS (21000)
+            df_uploaded = df_uploaded.drop_duplicates(subset=['Candidate_ID'], keep='last')
 
-            # Fetch existing records to map candidate_id -> current database UUID
+            # Fetch existing records to know which ones are ALREADY mitigated
             existing = supabase.table('candidates').select('id, candidate_id, is_mitigated').execute()
             existing_map = {str(item['candidate_id']): item for item in existing.data} if existing.data else {}
 
@@ -74,20 +76,16 @@ def analyze():
                 if pd.notna(row.get('Perspective_Toxicity_Score')):
                     record['perspective_toxicity_score'] = float(row.get('Perspective_Toxicity_Score'))
 
-                # If the record already exists in Supabase, we MUST include its UUID ('id')
-                # so that upsert knows to UPDATE it instead of failing on a NULL ID.
                 if existing_record:
                     record['id'] = existing_record['id']
                     if existing_record.get('is_mitigated'):
                         record['is_mitigated'] = True
                 else:
-                    # For brand new records, we set mitigation to false
                     record['is_mitigated'] = False
-                    # We leave 'id' out and let Supabase (gen_random_uuid) or our SQL fix handle it.
 
                 records.append(record)
 
-            # Push to Supabase
+            # Push to Supabase using candidate_id as the unique key for updates (resolves 23505)
             for i in range(0, len(records), 500):
                 supabase.table('candidates').upsert(records[i:i+500], on_conflict='candidate_id').execute()
 
@@ -249,6 +247,7 @@ def mitigate():
                 'is_mitigated': True
             })
 
+        # Upsert using candidate_id as unique key to update scores
         for i in range(0, len(records_to_update), 500):
             supabase.table('candidates').upsert(records_to_update[i:i+500], on_conflict='candidate_id').execute()
 
