@@ -1,0 +1,201 @@
+Candidate_ID,Gender,Accent,True_Hire_Decision,AI_Interview_Score,Perspective_Toxicity_Score,Transcript_Notes,AI_Hire_Decision
+5001,Male,Native,1,92.32722836110229,0.10320962028765224,Candidate demonstrated strong leadership skills.,1
+5002,Male,Native,1,97.72704521440428,0.09887084728775114,Candidate demonstrated strong leadership skills.,1
+5003,Male,Native,1,95.63569135255862,0.10472496575762812,Candidate demonstrated strong leadership skills.,1
+5004,Female,Native,1,89.78242828517371,0.09486947901666566,Candidate demonstrated strong leadership skills.,1
+5005,Female,Native,0,97.65945706801645,0.08441877227001025,Candidate demonstrated strong leadership skills.,1
+5006,Non-Binary,Native,0,92.12887452532051,0.07687417645529306,Candidate demonstrated strong leadership skills.,1
+5007,Non-Binary,Native,1,86.36115776449573,0.11926972661898827,Candidate demonstrated strong leadership skills.,1
+5008,Female,Native,1,86.32786642824667,0.08093742592467429,Candidate demonstrated strong leadership skills.,1
+5009,Female,Native,1,97.00299887665165,0.11452377569256054,Candidate demonstrated strong leadership skills.,1
+5010,Male,Native,1,94.71829697324188,0.07144858603259799,Candidate demonstrated strong leadership skills.,1
+5011,Male,Native,1,97.32740288732288,0.053633983502236415,Candidate demonstrated strong leadership skills.,1
+5012,Female,Native,1,93.84026719122176,0.08472408278615065,Candidate demonstrated strong leadership skills.,1
+5013,Male,Native,1,86.4197688460479,0.07530352253433216,Candidate demonstrated strong leadership skills.,1
+5014,Non-Binary,Native,1,90.48471430131156,0.0689388969554958,Candidate demonstrated strong leadership skills.,1
+5015,Male,Native,0,87.85596052001966,0.09093563419261132,Candidate demonstrated strong leadership skills.,1
+5016,Female,Native,1,96.54934756960776,0.08402357098986851,Candidate demonstrated strong leadership skills.,1
+5017,Female,Native,1,87.5921293116431,0.11578650625301622,Candidate demonstrated strong leadership skills.,1
+5018,Non-Binary,Native,0,88.81616739482412,0.09997317274618163,Candidate demonstrated strong leadership skills.,1
+5019,Non-Binary,Native,1,86.98525272426188,0.06941792901759769,Candidate demonstrated strong leadership skills.,1
+5020,Female,Native,1,85.86477211305453,0.07562552989302859,Candidate demonstrated strong leadership skills.,1
+5021,Non-Binary,Native,1,86.73622085808888,0.10359642348434407,Candidate demonstrated strong leadership skills.,1
+5022,Female,Native,1,86.89717075690335,0.08950641344898436,Candidate demonstrated strong leadership skills.,1
+5023,Non-Binary,Native,1,89.4100623041578,0.09017704216626561,Candidate demonstrated strong leadership skills.,1
+5024,Non-Binary,Native,1,93.07456385998996,0.08067345615274915,Candidate demonstrated strong leadership skills.,1
+5025,Female,Native,1,85.38177599585646,0.10700633262169844,Candidate demonstrated strong leadership skills.,1
+5026,Female,Native,1,85.79901979032141,0.09240838182408126,Candidate demonstrated strong leadership skills.,1
+5027,Non-Binary,Native,1,89.6870539595696,0.11319421764150962,Candidate demonstrated strong leadership skills.,1
+5028,Female,Native,0,87.34884990817272,0.10397800453441201,Candidate demonstrated strong leadership skills.,1
+5029,Non-Binary,Native,0,96.69794707714124,0.057356533849464555,Candidate demonstrated strong leadership skills.,1
+5030,Non-Binary,Native,1,86.32134494890238,0.11415044382394,Candidate demonstrated strong leadership skills.,1
+5031,Non-Binary,Native,1,89.95621605417409,0.05811196909886488,Candidate demonstrated strong leadership skills.,1
+5032,Female,Native,1,88.9842006633509,0.0918744768371654,Candidate demonstrated strong leadership skills.,1
+5033,Male,Native,0,94.05201407596122,0.05294783839483076,Candidate demonstrated strong leadership skills.,1
+5034,Female,Native,1,90.99546893647222,0.0948563007280277,Candidate demonstrated strong leadership skills.,1
+5035,Male,Native,1,88.9377681100297,0.05037444744633697,Candidate demonstrated strong leadership skills.,1
+5036,Non-Binary,Native,0,86.47308696988993,0.06726024378496147,Candidate demonstrated strong leadership skills.,1
+5037,Non-Binary,Native,1,86.39251788344087,0.09476862487029367,Candidate demonstrated strong leadership skills.,1
+5038,Female,Native,1,94.0336187026426,0.052349389392766746,Candidate demonstrated strong leadership skills.,1
+5039,Female,Native,1,93.94543618256611,0.07308374316629311,Candidate demonstrated strong leadership skills.,1
+5040,Male,Native,1,97.64374247253035,0.10867008660968712,Candidate demonstrated strong leadership skills.,1
+5041,Male,Native,0,96.1007141090034,0.06277944003725557,Candidate demonstrated strong leadership skills.,1
+5042,Male,Native,1,87.98150074677007,0.08826262860447237,Candidate demonstrated strong leadership skills.,1
+5043,Male,Native,1,97.8459003196079,0.07467812572995616,Candidate demonstrated strong leadership skills.,1
+5044,Female,Native,1,88.90580901104516,0.059654600703057434,Candidate demonstrated strong leadership skills.,1
+5045,Non-Binary,Native,0,91.59928540802771,0.09199378615373487,Candidate demonstrated strong leadership skills.,1
+5046,Female,Native,1,94.43635870574383,0.051221764732799824,Candidate demonstrated strong leadership skills.,1
+5047,Male,Native,0,92.13630528553666,0.09490552939855629,Candidate demonstrated strong leadership skills.,1
+5048,Female,Native,1,86.55474900033327,0.05815636944583671,Candidate demonstrated strong leadership skills.,1
+5049,Female,Native,1,96.92549076389112,0.05952184682784474,Candidate demonstrated strong leadership skills.,1
+5050,Non-Binary,Native,1,90.50138433512012,0.05072988354160569,Candidate demonstrated strong leadership skills.,1
+5051,Male,Native,1,92.11683317614278,0.10380301446979615,Candidate demonstrated strong leadership skills.,1
+5052,Male,Native,0,96.98456022279451,0.070804249723972,Candidate demonstrated strong leadership skills.,1
+5053,Female,Native,0,93.04400402783315,0.11663093826612676,Candidate demonstrated strong leadership skills.,1
+5054,Non-Binary,Native,1,89.0255405532058,0.07253237683962985,Candidate demonstrated strong leadership skills.,1
+5055,Male,Native,1,88.44652188408682,0.1140932597391364,Candidate demonstrated strong leadership skills.,1
+5056,Non-Binary,Native,0,90.86691383339938,0.06941526301902329,Candidate demonstrated strong leadership skills.,1
+5057,Male,Native,1,95.49210498160437,0.10211064270240776,Candidate demonstrated strong leadership skills.,1
+5058,Male,Native,0,90.91944956278506,0.08882833683514946,Candidate demonstrated strong leadership skills.,1
+5059,Non-Binary,Native,1,86.19625939930522,0.08911946103694376,Candidate demonstrated strong leadership skills.,1
+5060,Male,Native,1,90.97612043357188,0.07865389913002452,Candidate demonstrated strong leadership skills.,1
+5061,Male,Native,1,91.94628785500691,0.09545799103963842,Candidate demonstrated strong leadership skills.,1
+5062,Male,Native,1,87.90227264259697,0.061634693557223896,Candidate demonstrated strong leadership skills.,1
+5063,Female,Native,0,85.60834198531022,0.07779684548618537,Candidate demonstrated strong leadership skills.,1
+5064,Female,Native,1,91.53891947993156,0.11325340835645645,Candidate demonstrated strong leadership skills.,1
+5065,Female,Native,0,93.65223919084039,0.07006393565812814,Candidate demonstrated strong leadership skills.,1
+5066,Male,Native,1,95.14455080809016,0.055927945981829645,Candidate demonstrated strong leadership skills.,1
+5067,Male,Native,0,95.85369779631652,0.05299771116767042,Candidate demonstrated strong leadership skills.,1
+5068,Female,Native,1,97.67036970225999,0.07890692847651984,Candidate demonstrated strong leadership skills.,1
+5069,Non-Binary,Native,0,91.89372494234249,0.10005236612295985,Candidate demonstrated strong leadership skills.,1
+5070,Non-Binary,Native,1,91.68068339743647,0.06057942260906599,Candidate demonstrated strong leadership skills.,1
+5071,Non-Binary,Native,1,92.56893596192327,0.06746755097464965,Candidate demonstrated strong leadership skills.,1
+5072,Non-Binary,Native,1,85.05047783700294,0.09125469461372154,Candidate demonstrated strong leadership skills.,1
+5073,Male,Native,1,95.3088296996985,0.0720034106404457,Candidate demonstrated strong leadership skills.,1
+5074,Female,Native,1,94.24105486460928,0.08641188016179574,Candidate demonstrated strong leadership skills.,1
+5075,Male,Native,1,93.18626297112904,0.11416624920344011,Candidate demonstrated strong leadership skills.,1
+5076,Male,Native,1,86.68015779118004,0.0687916438509237,Candidate demonstrated strong leadership skills.,1
+5077,Male,Native,0,91.79068358621913,0.11416573046873994,Candidate demonstrated strong leadership skills.,1
+5078,Female,Native,0,89.18553621656885,0.07965419105213271,Candidate demonstrated strong leadership skills.,1
+5079,Non-Binary,Native,1,86.32426031621878,0.07527881071069907,Candidate demonstrated strong leadership skills.,1
+5080,Female,Native,1,92.60017549787757,0.0769542166287411,Candidate demonstrated strong leadership skills.,1
+5081,Male,Native,1,96.27447552166396,0.10604371218046267,Candidate demonstrated strong leadership skills.,1
+5082,Male,Native,1,93.7420481085659,0.09173772246384877,Candidate demonstrated strong leadership skills.,1
+5083,Non-Binary,Native,1,92.99479024968215,0.1089285459974646,Candidate demonstrated strong leadership skills.,1
+5084,Non-Binary,Native,1,90.24004037325922,0.10107097601155626,Candidate demonstrated strong leadership skills.,1
+5085,Male,Native,1,97.5578555499225,0.06011891583073788,Candidate demonstrated strong leadership skills.,1
+5086,Non-Binary,Native,1,94.6847845878639,0.11329313559225353,Candidate demonstrated strong leadership skills.,1
+5087,Female,Native,0,94.86778459034596,0.09402392250173996,Candidate demonstrated strong leadership skills.,1
+5088,Non-Binary,Native,1,96.93222453784637,0.0872895134736307,Candidate demonstrated strong leadership skills.,1
+5089,Female,Native,1,86.41034229277163,0.08473062177148091,Candidate demonstrated strong leadership skills.,1
+5090,Non-Binary,Native,1,91.14627451040003,0.06489883013848216,Candidate demonstrated strong leadership skills.,1
+5091,Male,Native,0,88.47443369910573,0.10253984984946472,Candidate demonstrated strong leadership skills.,1
+5092,Male,Native,1,96.66551182087574,0.11555239299049679,Candidate demonstrated strong leadership skills.,1
+5093,Non-Binary,Native,1,97.17890366552487,0.05429278954855626,Candidate demonstrated strong leadership skills.,1
+5094,Non-Binary,Native,1,92.1474143900305,0.0837882114448909,Candidate demonstrated strong leadership skills.,1
+5095,Male,Native,0,87.59733568007552,0.10357791334507885,Candidate demonstrated strong leadership skills.,1
+5096,Female,Native,1,94.36094447235072,0.06011261572279843,Candidate demonstrated strong leadership skills.,1
+5097,Male,Native,0,85.56659962070135,0.11597198373939265,Candidate demonstrated strong leadership skills.,1
+5098,Non-Binary,Native,1,92.54377557911454,0.07002419551085798,Candidate demonstrated strong leadership skills.,1
+5099,Male,Native,1,96.85361178112244,0.0685433960368254,Candidate demonstrated strong leadership skills.,1
+5100,Non-Binary,Native,1,88.14528974863799,0.11219865660795812,Candidate demonstrated strong leadership skills.,1
+6001,Non-Binary,Non-Native,1,38.01751419674635,0.804695291607508,"Strong technical skills, but transcription confidence is low due to accent.",0
+6002,Male,Non-Native,1,41.78831541114373,0.7719076159982262,"Strong technical skills, but transcription confidence is low due to accent.",0
+6003,Female,Non-Native,0,32.72849356057799,0.7595016384107869,"Strong technical skills, but transcription confidence is low due to accent.",0
+6004,Non-Binary,Non-Native,1,34.85543245724608,0.7065674530539331,"Strong technical skills, but transcription confidence is low due to accent.",0
+6005,Female,Non-Native,1,36.843723719154674,0.7031117927481002,"Strong technical skills, but transcription confidence is low due to accent.",0
+6006,Female,Non-Native,1,30.235803157097155,0.820425641087245,"Strong technical skills, but transcription confidence is low due to accent.",0
+6007,Male,Non-Native,0,28.100227898135508,0.7266142062676267,"Strong technical skills, but transcription confidence is low due to accent.",0
+6008,Female,Non-Native,1,35.01973471306604,0.7408317577385648,"Strong technical skills, but transcription confidence is low due to accent.",0
+6009,Male,Non-Native,1,30.335732144561614,0.8416791564350565,"Strong technical skills, but transcription confidence is low due to accent.",0
+6010,Female,Non-Native,1,32.47909892844709,0.8403197400038582,"Strong technical skills, but transcription confidence is low due to accent.",0
+6011,Female,Non-Native,1,29.721562327359415,0.7687118483614048,"Strong technical skills, but transcription confidence is low due to accent.",0
+6012,Male,Non-Native,1,30.912777182196706,0.706475638465609,"Strong technical skills, but transcription confidence is low due to accent.",0
+6013,Male,Non-Native,1,32.915059995189054,0.8122382106332731,"Strong technical skills, but transcription confidence is low due to accent.",0
+6014,Female,Non-Native,1,38.42485976835174,0.8342422484280796,"Strong technical skills, but transcription confidence is low due to accent.",0
+6015,Male,Non-Native,1,37.50844768940231,0.774483884712928,"Strong technical skills, but transcription confidence is low due to accent.",0
+6016,Male,Non-Native,1,29.875665495402444,0.7938580208174122,"Strong technical skills, but transcription confidence is low due to accent.",0
+6017,Non-Binary,Non-Native,1,29.928983572120533,0.7658960253172767,"Strong technical skills, but transcription confidence is low due to accent.",0
+6018,Male,Non-Native,1,39.60833607324362,0.7763109084479352,"Strong technical skills, but transcription confidence is low due to accent.",0
+6019,Male,Non-Native,1,34.65830489666663,0.8296540475766593,"Strong technical skills, but transcription confidence is low due to accent.",0
+6020,Male,Non-Native,1,33.76881958788017,0.7159620072282179,"Strong technical skills, but transcription confidence is low due to accent.",0
+6021,Male,Non-Native,1,37.1018523787731,0.8327694579198668,"Strong technical skills, but transcription confidence is low due to accent.",0
+6022,Non-Binary,Non-Native,0,35.50704097724416,0.7211424261999706,"Strong technical skills, but transcription confidence is low due to accent.",0
+6023,Male,Non-Native,1,36.37702963717741,0.8240157246325918,"Strong technical skills, but transcription confidence is low due to accent.",0
+6024,Female,Non-Native,1,39.473675754531385,0.8244208772112942,"Strong technical skills, but transcription confidence is low due to accent.",0
+6025,Female,Non-Native,1,38.990471171557324,0.8111896448964424,"Strong technical skills, but transcription confidence is low due to accent.",0
+6026,Non-Binary,Non-Native,1,29.402297160642668,0.716872166814198,"Strong technical skills, but transcription confidence is low due to accent.",0
+6027,Male,Non-Native,1,39.45625200490099,0.7625866695721343,"Strong technical skills, but transcription confidence is low due to accent.",0
+6028,Male,Non-Native,1,37.78320055289155,0.7605018694805676,"Strong technical skills, but transcription confidence is low due to accent.",0
+6029,Male,Non-Native,0,40.621926137282884,0.8327427181540119,"Strong technical skills, but transcription confidence is low due to accent.",0
+6030,Male,Non-Native,1,39.67704083289263,0.709059246499287,"Strong technical skills, but transcription confidence is low due to accent.",0
+6031,Non-Binary,Non-Native,1,28.188807026420733,0.7990621717669409,"Strong technical skills, but transcription confidence is low due to accent.",0
+6032,Male,Non-Native,1,28.081087975724465,0.8466413586136854,"Strong technical skills, but transcription confidence is low due to accent.",0
+6033,Male,Non-Native,1,33.609360710317354,0.8209268417809708,"Strong technical skills, but transcription confidence is low due to accent.",0
+6034,Female,Non-Native,1,37.81724700574288,0.7435127505554027,"Strong technical skills, but transcription confidence is low due to accent.",0
+6035,Male,Non-Native,0,38.45371971528607,0.7748938839440607,"Strong technical skills, but transcription confidence is low due to accent.",0
+6036,Non-Binary,Non-Native,0,29.99080287890363,0.7874916895208317,"Strong technical skills, but transcription confidence is low due to accent.",0
+6037,Non-Binary,Non-Native,1,40.677786246612776,0.8263846920545778,"Strong technical skills, but transcription confidence is low due to accent.",0
+6038,Non-Binary,Non-Native,1,41.25869872617124,0.7428181586648577,"Strong technical skills, but transcription confidence is low due to accent.",0
+6039,Male,Non-Native,1,31.64297596367049,0.774869226759699,"Strong technical skills, but transcription confidence is low due to accent.",0
+6040,Male,Non-Native,1,38.346093231424405,0.7583344313899028,"Strong technical skills, but transcription confidence is low due to accent.",0
+6041,Male,Non-Native,1,28.29512553149306,0.7698102586870416,"Strong technical skills, but transcription confidence is low due to accent.",0
+6042,Female,Non-Native,1,30.149776962437493,0.7106015530946529,"Strong technical skills, but transcription confidence is low due to accent.",0
+6043,Non-Binary,Non-Native,1,35.105609607313085,0.8135491131885306,"Strong technical skills, but transcription confidence is low due to accent.",0
+6044,Male,Non-Native,0,40.346670816183135,0.7641638128784162,"Strong technical skills, but transcription confidence is low due to accent.",0
+6045,Male,Non-Native,1,40.59408916808413,0.8207845329889365,"Strong technical skills, but transcription confidence is low due to accent.",0
+6046,Male,Non-Native,1,31.59251516052855,0.7707342647896445,"Strong technical skills, but transcription confidence is low due to accent.",0
+6047,Non-Binary,Non-Native,1,28.784226305560136,0.7854562186688194,"Strong technical skills, but transcription confidence is low due to accent.",0
+6048,Female,Non-Native,1,34.7871972098976,0.718565453080405,"Strong technical skills, but transcription confidence is low due to accent.",0
+6049,Non-Binary,Non-Native,0,28.78706481770322,0.7378898324757546,"Strong technical skills, but transcription confidence is low due to accent.",0
+6050,Male,Non-Native,1,38.52694911666955,0.771379968082235,"Strong technical skills, but transcription confidence is low due to accent.",0
+6051,Female,Non-Native,1,33.40769924371908,0.7710910675384077,"Strong technical skills, but transcription confidence is low due to accent.",0
+6052,Female,Non-Native,1,41.394447051003866,0.7220721117101683,"Strong technical skills, but transcription confidence is low due to accent.",0
+6053,Male,Non-Native,1,32.90043383839177,0.7438023405002063,"Strong technical skills, but transcription confidence is low due to accent.",0
+6054,Male,Non-Native,1,32.52807275327381,0.7249052687090469,"Strong technical skills, but transcription confidence is low due to accent.",0
+6055,Female,Non-Native,1,38.040227968317126,0.7875156681913068,"Strong technical skills, but transcription confidence is low due to accent.",0
+6056,Female,Non-Native,0,28.94994677048984,0.7004674600735011,"Strong technical skills, but transcription confidence is low due to accent.",0
+6057,Female,Non-Native,1,41.45767031977194,0.7823523950928372,"Strong technical skills, but transcription confidence is low due to accent.",0
+6058,Non-Binary,Non-Native,1,33.611310520730804,0.805111936297848,"Strong technical skills, but transcription confidence is low due to accent.",0
+6059,Female,Non-Native,1,38.902636135622316,0.7684590937968839,"Strong technical skills, but transcription confidence is low due to accent.",0
+6060,Male,Non-Native,1,36.25117454069547,0.8111758785963311,"Strong technical skills, but transcription confidence is low due to accent.",0
+6061,Male,Non-Native,1,35.934451025378166,0.7778155982403349,"Strong technical skills, but transcription confidence is low due to accent.",0
+6062,Non-Binary,Non-Native,1,31.103462474776755,0.7646989515228038,"Strong technical skills, but transcription confidence is low due to accent.",0
+6063,Non-Binary,Non-Native,1,40.25915930972483,0.7136133195578572,"Strong technical skills, but transcription confidence is low due to accent.",0
+6064,Non-Binary,Non-Native,1,37.383377582234296,0.7249270706988393,"Strong technical skills, but transcription confidence is low due to accent.",0
+6065,Non-Binary,Non-Native,1,39.48096896569733,0.8389585549388243,"Strong technical skills, but transcription confidence is low due to accent.",0
+6066,Male,Non-Native,1,40.45969377537214,0.8054745360947863,"Strong technical skills, but transcription confidence is low due to accent.",0
+6067,Male,Non-Native,1,40.85356914317774,0.8423498297241153,"Strong technical skills, but transcription confidence is low due to accent.",0
+6068,Female,Non-Native,0,34.69779021687522,0.8469430343447254,"Strong technical skills, but transcription confidence is low due to accent.",0
+6069,Non-Binary,Non-Native,1,35.634159393281024,0.8499861983927233,"Strong technical skills, but transcription confidence is low due to accent.",0
+6070,Female,Non-Native,1,41.70873025393453,0.7061921452407506,"Strong technical skills, but transcription confidence is low due to accent.",0
+6071,Male,Non-Native,0,30.362710049182,0.8357703331970736,"Strong technical skills, but transcription confidence is low due to accent.",0
+6072,Non-Binary,Non-Native,0,28.715165304759754,0.7610822465386915,"Strong technical skills, but transcription confidence is low due to accent.",0
+6073,Male,Non-Native,1,38.47790080539863,0.7011577863865553,"Strong technical skills, but transcription confidence is low due to accent.",0
+6074,Male,Non-Native,1,39.50240965495506,0.7577480969495971,"Strong technical skills, but transcription confidence is low due to accent.",0
+6075,Male,Non-Native,1,30.7461226651116,0.7250324230590371,"Strong technical skills, but transcription confidence is low due to accent.",0
+6076,Female,Non-Native,1,30.48929789212121,0.8288878404139277,"Strong technical skills, but transcription confidence is low due to accent.",0
+6077,Non-Binary,Non-Native,1,34.767736541333534,0.7308666429118003,"Strong technical skills, but transcription confidence is low due to accent.",0
+6078,Non-Binary,Non-Native,1,41.50341566158991,0.8051725325123582,"Strong technical skills, but transcription confidence is low due to accent.",0
+6079,Male,Non-Native,0,38.13442334329606,0.7832771110946078,"Strong technical skills, but transcription confidence is low due to accent.",0
+6080,Male,Non-Native,1,40.15542382308739,0.7353313750325806,"Strong technical skills, but transcription confidence is low due to accent.",0
+6081,Non-Binary,Non-Native,1,30.805530222615346,0.7535436538601137,"Strong technical skills, but transcription confidence is low due to accent.",0
+6082,Non-Binary,Non-Native,1,30.588695634320903,0.7903354258329341,"Strong technical skills, but transcription confidence is low due to accent.",0
+6083,Non-Binary,Non-Native,0,35.213029219159935,0.8226427553953267,"Strong technical skills, but transcription confidence is low due to accent.",0
+6084,Non-Binary,Non-Native,0,28.661677572377112,0.7420411136768188,"Strong technical skills, but transcription confidence is low due to accent.",0
+6085,Female,Non-Native,0,32.364233812410966,0.7831390051146537,"Strong technical skills, but transcription confidence is low due to accent.",0
+6086,Non-Binary,Non-Native,1,29.099955454277307,0.8414552199444691,"Strong technical skills, but transcription confidence is low due to accent.",0
+6087,Non-Binary,Non-Native,0,39.534844047157755,0.741253506364865,"Strong technical skills, but transcription confidence is low due to accent.",0
+6088,Male,Non-Native,1,39.993856090519444,0.7905908832697478,"Strong technical skills, but transcription confidence is low due to accent.",0
+6089,Non-Binary,Non-Native,1,34.898441834144634,0.7092233919253681,"Strong technical skills, but transcription confidence is low due to accent.",0
+6090,Female,Non-Native,1,39.09097926563059,0.7152152714988147,"Strong technical skills, but transcription confidence is low due to accent.",0
+6091,Non-Binary,Non-Native,1,39.67187193531256,0.802319906125802,"Strong technical skills, but transcription confidence is low due to accent.",0
+6092,Male,Non-Native,0,30.183405468705462,0.7803139981195245,"Strong technical skills, but transcription confidence is low due to accent.",0
+6093,Female,Non-Native,0,31.58354410671271,0.8472214324380657,"Strong technical skills, but transcription confidence is low due to accent.",0
+6094,Non-Binary,Non-Native,1,31.312806529256843,0.7345905052855476,"Strong technical skills, but transcription confidence is low due to accent.",0
+6095,Non-Binary,Non-Native,1,39.289443178979084,0.7434259356406554,"Strong technical skills, but transcription confidence is low due to accent.",0
+6096,Female,Non-Native,1,28.710476768090338,0.741097997156092,"Strong technical skills, but transcription confidence is low due to accent.",0
+6097,Male,Non-Native,1,34.802511018369636,0.7909131991463341,"Strong technical skills, but transcription confidence is low due to accent.",0
+6098,Female,Non-Native,1,29.45083228512879,0.8260787072161324,"Strong technical skills, but transcription confidence is low due to accent.",0
+6099,Male,Non-Native,1,32.21898478430671,0.7686786966714013,"Strong technical skills, but transcription confidence is low due to accent.",0
+6100,Male,Non-Native,1,29.177603868628047,0.8086541286665246,"Strong technical skills, but transcription confidence is low due to accent.",0
